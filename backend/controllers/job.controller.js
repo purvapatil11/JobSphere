@@ -3,10 +3,10 @@ import { Job } from "../models/jobjob.model.js";
 //--------------------job posting for admin----------------------------------------
 export const postJob = async (req, res) => {
   try {
-    const { title, description, requirements, salary, location, jobtype, experience, position, companyId } = req.body;
+    const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
     const userId = req.id;
 
-    if (!title || !description || !requirements || !salary || !location || !jobtype || !experience || !position || !companyId) {
+    if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
       return res.status(400).json({
         message: "Something is missing",
         success: false
@@ -19,7 +19,7 @@ export const postJob = async (req, res) => {
       requirements: requirements.split(","),
       salary: Number(salary),
       location,
-      jobtype,
+      jobType,
       experienceLevel: experience,
       position,
       companyId,
@@ -35,8 +35,10 @@ export const postJob = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "Server error",
-      success: false
+    //   message: "Server error",
+    //   success: false
+    error
+    
     });
   }
 };
@@ -53,7 +55,9 @@ export const getAllJob = async (req, res) => {
       ]
     };
 
-    const jobs = await Job.find(query);
+    const jobs = await Job.find(query).populate({
+      path:"Company"
+    }).sort({created_by: -1});
 
     return res.status(200).json({
       jobs,
