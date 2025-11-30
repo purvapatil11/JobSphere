@@ -1,4 +1,4 @@
-import { Job } from "../models/jobjob.model.js";
+import { Job } from "../models/job.model.js";
 
 //--------------------job posting for admin----------------------------------------
 export const postJob = async (req, res) => {
